@@ -1,0 +1,42 @@
+<!doctype html>
+<html xmlns:th="http://www.thymeleaf.org">
+    <head>
+        <title>Trang chu</title>
+    <th:block th:replace="base :: styles"></th:block>
+</head>
+<body>
+    <div th:replace="base :: header"></div>
+
+    <main class="container">
+        <h1 class="text-center text-info mt-1">QUẢN TRỊ SẢN PHẨM</h1>
+
+        <form method="post" th:action="@{/add}" th:object="${product}">
+            <div class="mb-3 mt-3">
+                <label for="name">Tên sản phẩm</label>
+                <input type="text" class="form-control" id="name" th:field="*{name}" placeholder="Tên sản phẩm" />
+            </div>
+            <div class="mb-3 mt-3">
+                <label for="price">Gía sản phẩm</label>
+                <input type="text" class="form-control" th:field="*{price}" id="price" placeholder="Gía sản phẩm" />
+            </div>
+            <div class="mb-3 mt-3">
+                <label for="cate">Danh mục sản phẩm</label>
+                <select class="form-select" id="cate" th:field="*{categoryId}">
+                    <option th:each="c:${categories}" th:text="${c.name}" th:value="${c.id}"></option>
+                </select>
+            </div>
+            <div class="mb-3 mt-3">
+                <input type="hidden" th:field="*{id}" />
+                <input type="hidden" th:field="*{image}" />
+                
+                <button class="btn btn-info">
+                    <span th:if="${product.id == null}">Thêm sản phẩm</span>
+                    <span th:unless="${product.id == null}">Cập nhật sản phẩm</span>
+                </button>
+            </div>
+        </form>
+    </main>
+
+    <div th:replace="base :: footer"></div>
+</body>
+</html>
