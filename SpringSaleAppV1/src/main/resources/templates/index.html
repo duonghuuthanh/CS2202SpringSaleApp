@@ -23,14 +23,14 @@
                     <div class="mb-3 mt-3">
                         <input type="text" class="form-control" name="toPrice" placeholder="Gía max =" />
                     </div>
-                    
+
                 </div>
             </div>
             <div class="mb-3 mt-3">
                 <button class="btn btn-info" type="submit">Tìm kiếm</button>
             </div>
         </form>
-
+        <hr  />    
         <a th:href="@{/products}" class="btn btn-info mt-2">Thêm sản phẩm</a>
         <table class="table table-striped">
             <thead>
@@ -51,7 +51,7 @@
                     <td th:text="${p.name}"></td>
                     <td th:text="${p.price + ' VNĐ'}"></td>
                     <td>
-                        <button class="btn btn-danger">&times;</button>
+                        <button class="btn btn-danger" th:onclick="'deleteProduct('+'@{/api/products/}'+','+${p.id}+')'">&times;</button>
                         <a th:href="@{'/products/' + ${p.id}}" class="btn btn-success">&#128296;️</a>
                     </td>
                 </tr>
@@ -60,5 +60,7 @@
     </main>
 
     <div th:replace="base :: footer"></div>
+
+    <script th:src="@{/js/main.js}"></script>
 </body>
 </html>

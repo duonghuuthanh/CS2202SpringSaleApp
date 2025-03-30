@@ -32,6 +32,7 @@ public class ProductRepositoryImpl implements ProductRepository{
     @Autowired
     private LocalSessionFactoryBean factory;
 
+    @Override
     public List<Product> getProducts(Map<String, String> params) {
         Session s = this.factory.getObject().getCurrentSession();
         CriteriaBuilder b = s.getCriteriaBuilder();
@@ -72,8 +73,8 @@ public class ProductRepositoryImpl implements ProductRepository{
 
         Query query = s.createQuery(q);
 
-        if (params != null) {
-            int page = Integer.parseInt(params.getOrDefault("page", "1"));
+        if (params != null && params.containsKey("page")) {
+            int page = Integer.parseInt(params.get("page"));
             int start = (page - 1) * PAGE_SIZE;
 
             query.setMaxResults(PAGE_SIZE);
@@ -84,12 +85,14 @@ public class ProductRepositoryImpl implements ProductRepository{
 
     }
 
+    @Override
     public Product getProductById(int id) {
         Session s = this.factory.getObject().getCurrentSession();
         return s.get(Product.class, id);
 
     }
 
+    @Override
     public Product addOrUpdateProduct(Product p) {
         Session s = this.factory.getObject().getCurrentSession();
         if (p.getId() == null) {
@@ -104,10 +107,10 @@ public class ProductRepositoryImpl implements ProductRepository{
 
     }
 
+    @Override
     public void deleleProduct(int id) {
         Session s = this.factory.getObject().getCurrentSession();
         Product p = this.getProductById(id);
         s.remove(p);
-
     }
 }
