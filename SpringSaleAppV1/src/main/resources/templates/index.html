@@ -51,7 +51,7 @@
                     <td th:text="${p.name}"></td>
                     <td th:text="${p.price + ' VNĐ'}"></td>
                     <td>
-                        <button class="btn btn-danger" th:onclick="'deleteProduct('+'@{/api/products/}'+','+${p.id}+')'">&times;</button>
+                        <button class="btn btn-danger" th:onclick="'deleteProduct(\''+@{/api/products/}+'\','+${p.id}+')'">&times;</button>
                         <a th:href="@{'/products/' + ${p.id}}" class="btn btn-success">&#128296;️</a>
                     </td>
                 </tr>

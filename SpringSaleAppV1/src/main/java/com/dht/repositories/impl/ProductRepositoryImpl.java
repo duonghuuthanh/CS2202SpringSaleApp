@@ -4,6 +4,7 @@
  */
 package com.dht.repositories.impl;
 
+import com.dht.pojo.Comment;
 import com.dht.pojo.Product;
 import com.dht.repositories.ProductRepository;
 import jakarta.persistence.Query;
@@ -101,8 +102,6 @@ public class ProductRepositoryImpl implements ProductRepository{
             s.merge(p);
         }
 
-        s.refresh(p);
-
         return p;
 
     }
@@ -112,5 +111,19 @@ public class ProductRepositoryImpl implements ProductRepository{
         Session s = this.factory.getObject().getCurrentSession();
         Product p = this.getProductById(id);
         s.remove(p);
+    }
+
+    @Override
+    public List<Comment> getComments(int productId) {
+        Session s = this.factory.getObject().getCurrentSession();
+        CriteriaBuilder b = s.getCriteriaBuilder();
+        CriteriaQuery<Comment> q = b.createQuery(Comment.class);
+        Root root = q.from(Comment.class);
+        q.select(root);
+        
+        q.where(b.equal(root.get("productId").as(Integer.class), productId));
+        
+        Query query = s.createQuery(q);
+        return query.getResultList();
     }
 }

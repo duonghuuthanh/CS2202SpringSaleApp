@@ -62,7 +62,7 @@ public class User implements Serializable {
     private String username;
     @Basic(optional = false)
     @Column(name = "password")
-    @JsonIgnore
+    
     private String password;
     @Column(name = "active")
     private Boolean active;
