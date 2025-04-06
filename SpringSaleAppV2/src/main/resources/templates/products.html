@@ -1,7 +1,7 @@
 <!doctype html>
 <html xmlns:th="http://www.thymeleaf.org">
     <head>
-        <title>Trang chu</title>
+        <title>Quản lý sản phẩm</title>
     <th:block th:replace="base :: styles"></th:block>
 </head>
 <body>
@@ -10,7 +10,7 @@
     <main class="container">
         <h1 class="text-center text-info mt-1">QUẢN TRỊ SẢN PHẨM</h1>
 
-        <form method="post" th:action="@{/add}" th:object="${product}">
+        <form method="post" th:action="@{/add}" th:object="${product}" enctype="multipart/form-data">
             <div class="mb-3 mt-3">
                 <label for="name">Tên sản phẩm</label>
                 <input type="text" class="form-control" id="name" th:field="*{name}" placeholder="Tên sản phẩm" />
@@ -24,6 +24,12 @@
                 <select class="form-select" id="cate" th:field="*{categoryId}">
                     <option th:each="c:${categories}" th:text="${c.name}" th:value="${c.id}"></option>
                 </select>
+            </div>
+            <div class="mb-3 mt-3">
+                <label for="price">Ảnh sản phẩm</label>
+                <input type="file" class="form-control" th:field="*{file}" />
+                
+                <img th:src="${product.image}" width="200" th:if="${product.id != null}" />
             </div>
             <div class="mb-3 mt-3">
                 <input type="hidden" th:field="*{id}" />
