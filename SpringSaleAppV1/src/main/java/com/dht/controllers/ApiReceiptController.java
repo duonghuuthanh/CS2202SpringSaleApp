@@ -27,7 +27,7 @@ public class ApiReceiptController {
     @Autowired
     private ReceiptService receiptService;
     
-    @PostMapping("/cart")
+    @PostMapping("/secure/cart")
     @ResponseStatus(HttpStatus.OK)
     public void addReceipt(@RequestBody List<Cart> carts) {
         this.receiptService.addReceipt(carts);
