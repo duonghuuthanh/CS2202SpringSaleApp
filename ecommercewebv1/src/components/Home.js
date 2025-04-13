@@ -1,14 +1,17 @@
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { Alert, Button, Card, Col, Row, Spinner } from "react-bootstrap";
 import Apis, { endpoints } from "../configs/Apis";
 import { useSearchParams } from "react-router-dom";
 import MySpinner from "./layout/MySpinner";
+import cookie from 'react-cookies'
+import { MyCartDispatchContext } from "../configs/MyContexts";
 
 const Home = () => {
     const [products, setProducts] = useState([]);
     const [page, setPage] = useState(1);
     const [loading, setLoading] = useState(false);
     const [q] = useSearchParams();
+    const dispatch = useContext(MyCartDispatchContext);
     
 
     const loadProducts = async () => {
@@ -58,6 +61,27 @@ const Home = () => {
             setPage(page + 1);
     }
 
+    const addToCart = (product) => {
+        let cart = cookie.load('cart') || {};
+        if (product.id in cart) {
+            cart[product.id]['quantity']++;
+        } else {
+            cart[product.id] = {
+                "id": product.id,
+                "name": product.name,
+                "price": product.price,
+                "quantity": 1
+            }
+        }
+
+        dispatch({
+            "type": "update"
+        })
+
+        cookie.save('cart', cart);
+        console.info(cart);
+    }
+
     return (
         <>
             {products.length === 0 && <Alert variant="info" className="mt-1">Không có sản phẩm nào!</Alert>}
@@ -71,7 +95,7 @@ const Home = () => {
                             {p.price.toLocaleString()} VNĐ
                             </Card.Text>
                             <Button className="m-1" variant="primary">Xem chi tiết</Button>
-                            <Button className="m-1" variant="danger">Đặt hàng</Button>
+                            <Button className="m-1" variant="danger" onClick={() => addToCart(p)}>Đặt hàng</Button>
                         </Card.Body>
                     </Card>
                 </Col>)}

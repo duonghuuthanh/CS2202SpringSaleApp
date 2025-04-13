@@ -58,6 +58,7 @@ public class ApiUserController {
 
     @RequestMapping("/secure/profile")
     @ResponseBody
+    @CrossOrigin
     public ResponseEntity<User> getProfile(Principal principal) {
         return new ResponseEntity<>(this.userDetailsService.getUserByUsername(principal.getName()), HttpStatus.OK);
     }

@@ -1,7 +1,10 @@
-import { useState } from "react";
+import { useContext, useState } from "react";
 import { Button, FloatingLabel, Form } from "react-bootstrap";
 import MySpinner from "./layout/MySpinner";
-import Apis, { endpoints } from "../configs/Apis";
+import Apis, { authApis, endpoints } from "../configs/Apis";
+import cookie from 'react-cookies'
+import { MyDispatchContext } from "../configs/MyContexts";
+import { useNavigate } from "react-router-dom";
 
 const Login = () => {
     const info = [{
@@ -13,6 +16,8 @@ const Login = () => {
         type: "password", 
         field: "password"
     }];
+    const dispatch = useContext(MyDispatchContext);
+    const nav = useNavigate();
 
     const [user, setUser] = useState({});
     const [loading, setLoading] = useState(false);
@@ -24,6 +29,18 @@ const Login = () => {
             ...user
         });
         console.info(res.data);
+        cookie.save('token', res.data.token);
+
+         // let u = await authApis().get(endpoints['profile']);
+        // console.info(u.data)
+
+        dispatch({
+            "type": "login",
+            "payload": {
+                "username": "dhthanh"
+            }
+        });
+        nav("/");
     }
 
     const setState = (value, field) => {

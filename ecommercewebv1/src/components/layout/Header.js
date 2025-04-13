@@ -1,12 +1,16 @@
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { Button, Container, Form, Nav, Navbar, NavDropdown } from "react-bootstrap";
 import { Link, useNavigate } from "react-router-dom";
 import Apis, { endpoints } from "../../configs/Apis";
+import { MyCartContext, MyDispatchContext, MyUserContext } from "../../configs/MyContexts";
 
 const Header = () => {
     const [categories, setCategories] = useState([]);
     const [kw, setKw] = useState();
     const nav = useNavigate();
+    const user = useContext(MyUserContext);
+    const dispatch = useContext(MyDispatchContext);
+    const totalQuantity = useContext(MyCartContext);
    
     const loadCates = async () => {
         let res = await Apis.get(endpoints['categories']);
@@ -44,8 +48,17 @@ const Header = () => {
                             return <Link className="dropdown-item" key={c.id} to={url}>{c.name}</Link>;
                         })}
                     </NavDropdown>
-                    <Link to="/register" className="nav-link text-success">Đăng ký</Link>
-                    <Link to="/login" className="nav-link text-danger">Đăng nhập</Link>
+
+                    {user===null?<>
+                        <Link to="/register" className="nav-link text-success">Đăng ký</Link>
+                        <Link to="/login" className="nav-link text-danger">Đăng nhập</Link>
+                    </>:<>
+                        <Link to="/" className="nav-link text-success">Chào {user.username}!</Link>
+                        <Button className="btn btnd-danger" onClick={() => dispatch({"type": "logout"})}>Đăng xuất</Button>
+                    </>}
+
+                    <Link to="/cart" className="nav-link text-success">Giỏ hàng <span className="badge bg-danger">{totalQuantity}</span></Link>
+                    
                 </Nav>
                 <Form onSubmit={search} className="d-flex">
                     <Form.Control value={kw} onChange={e => setKw(e.target.value)}
