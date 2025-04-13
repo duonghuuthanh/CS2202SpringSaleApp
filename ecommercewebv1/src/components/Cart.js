@@ -1,5 +1,6 @@
 import { useContext, useState } from "react";
-import { Alert, Button, Col, Row, Table } from "react-bootstrap";
+import { Alert, Button } from "react-bootstrap";
+import Table from 'react-bootstrap/Table';
 import cookie from 'react-cookies'
 import { MyUserContext } from "../configs/MyContexts";
 import { Link } from "react-router-dom";
@@ -25,18 +26,22 @@ const Cart = () => {
                 <Alert variant="warning">KHÔNG có sản phẩm nào trong giỏ!</Alert>
             </>:<>
                 <Table striped bordered hover>
-                    <Row>
-                        <Col>Id</Col>
-                        <Col>Tên sản phẩm</Col>
-                        <Col>Đơn gia</Col>
-                        <Col></Col>
-                    </Row>
-                    {Object.values(cart).map(c => <Row key={c.id}>
-                        <Col>{c.id}</Col>
-                        <Col>{c.name}</Col>
-                        <Col>{c.price}</Col>
-                        <Col>{c.quantity}</Col>
-                    </Row>)}
+                    <thead>
+                        <tr>
+                            <th>Id</th>
+                            <th>Tên sản phẩm</th>
+                            <th>Đơn gia</th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {Object.values(cart).map(c => <tr key={c.id}>
+                            <td>{c.id}</td>
+                            <td>{c.name}</td>
+                            <td>{c.price}</td>
+                            <td>{c.quantity}</td>
+                        </tr>)}
+                    </tbody>
                     
                 </Table>
             </>}

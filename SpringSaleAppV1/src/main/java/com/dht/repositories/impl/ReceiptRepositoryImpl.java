@@ -16,6 +16,7 @@ import java.util.List;
 import org.hibernate.Session;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.orm.hibernate5.LocalSessionFactoryBean;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -39,7 +40,7 @@ public class ReceiptRepositoryImpl implements ReceiptRepository {
         Session s = this.factory.getObject().getCurrentSession();
         SaleOrder r = new SaleOrder();
         r.setCreatedDate(new Date());
-        r.setUserId(this.userRepo.getUserByUsername("dhthanh")); // update current user
+        r.setUserId(this.userRepo.getUserByUsername(SecurityContextHolder.getContext().getAuthentication().getName())); // update current user
         s.persist(r);
 
         for (var c : carts) {

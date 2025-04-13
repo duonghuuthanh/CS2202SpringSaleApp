@@ -14,10 +14,12 @@ export const endpoints = {
 }
 
 export const authApis = () => {
+    console.info(cookie.load('token'));
     return axios.create({
         baseURL: BASE_URL,
         headers: {
-            'Authorization': `Bearer ${cookie.load('token')}`
+            'Authorization': `Bearer ${cookie.load('token')}`,
+            'Content-Type': 'application/json'
         }
     })
 }

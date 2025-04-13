@@ -25,22 +25,28 @@ const Login = () => {
     const login = async (e) => {
         e.preventDefault();
 
-        let res = await Apis.post(endpoints['login'], {
-            ...user
-        });
-        console.info(res.data);
-        cookie.save('token', res.data.token);
-
-         // let u = await authApis().get(endpoints['profile']);
-        // console.info(u.data)
-
-        dispatch({
-            "type": "login",
-            "payload": {
-                "username": "dhthanh"
-            }
-        });
-        nav("/");
+        try {
+            setLoading(true);
+            let res = await Apis.post(endpoints['login'], {
+                ...user
+            });
+            console.info(res.data);
+            cookie.save('token', res.data.token);
+    
+            let u = await authApis().get(endpoints['profile']);
+            console.info(u.data)
+    
+            dispatch({
+                "type": "login",
+                "payload": u.data
+            });
+            nav("/");
+        } catch (err) {
+            console.error(err);
+        } finally {
+            setLoading(false);
+        }
+      
     }
 
     const setState = (value, field) => {
