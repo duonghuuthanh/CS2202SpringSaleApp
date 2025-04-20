@@ -1,14 +1,18 @@
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { Alert, Button, Card, Col, Row, Spinner } from "react-bootstrap";
 import Apis, { endpoints } from "../configs/Apis";
 import { useSearchParams } from "react-router-dom";
 import MySpinner from "./layouts/MySpinner";
+import cookie from 'react-cookies';
+import { MyCartContext } from "../configs/Contexts";
+
 
 const Home = () => {
     const [products, setProducts] = useState([]);
     const [loading, setLoading] = useState(true);
     const [page, setPage] = useState(1);
     const [q] = useSearchParams();
+    const [, cartDispatch] = useContext(MyCartContext);
 
     let loadProducts = async () => {
         try {
@@ -60,6 +64,27 @@ const Home = () => {
             setPage(page + 1);
     }
 
+    const addToCart = (p) => {
+        let cart = cookie.load('cart') || {};
+        if (p.id in cart) {
+            cart[p.id]['quantity']++;
+        } else {
+            cart[p.id] = {
+                "id": p.id,
+                "name": p.name,
+                "price": p.price,
+                "quantity": 1
+            }
+        }
+
+        cookie.save('cart', cart);
+        cartDispatch({
+            "type": "update"
+        });
+
+        console.info(cart);
+    }
+
     return (
         <>
             {products.length === 0 ? <Alert variant="info" className="mt-1">KHÔNG có sản phẩm nào!</Alert>:<>
@@ -71,7 +96,7 @@ const Home = () => {
                                 <Card.Title>{p.name}</Card.Title>
                                 <Card.Text>{p.price} VNĐ</Card.Text>
                                 <Button variant="primary" className="me-1">Xem chi tiết</Button>
-                                <Button variant="danger">Đặt hàng</Button>
+                                <Button onClick={() => addToCart(p)} variant="danger">Đặt hàng</Button>
                             </Card.Body>
                         </Card>
                     </Col>)}

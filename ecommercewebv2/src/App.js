@@ -6,28 +6,35 @@ import Login from "./components/Login";
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { Container } from "react-bootstrap";
 import Register from "./components/Register";
-import { MyDispatchContext, MyUserContext } from "./configs/Contexts";
+import { MyCartContext, MyDispatchContext, MyUserContext } from "./configs/Contexts";
 import { useReducer } from "react";
 import MyUserReducer from "./reducers/MyUserReducer";
+import Cart from "./components/Cart";
+import MyCartReducer from "./reducers/MyCartReducer";
 
 const App = () => {
   const [user, dispatch] = useReducer(MyUserReducer, null);
+  const [totalCart, cartDispatch] = useReducer(MyCartReducer, 0);
+
   return (
     <MyUserContext.Provider value={user}>
       <MyDispatchContext.Provider value={dispatch}>
-        <BrowserRouter>
-          <Header />
+        <MyCartContext.Provider value={[totalCart, cartDispatch]}>
+          <BrowserRouter>
+            <Header />
 
-          <Container>
-            <Routes>
-              <Route path="/" element={<Home />} />
-              <Route path="/login" element={<Login />} />
-              <Route path="/register" element={<Register />} />
-            </Routes>
-          </Container>
+            <Container>
+              <Routes>
+                <Route path="/" element={<Home />} />
+                <Route path="/login" element={<Login />} />
+                <Route path="/register" element={<Register />} />
+                <Route path="/cart" element={<Cart />} />
+              </Routes>
+            </Container>
 
-          <Footer />
+            <Footer />
         </BrowserRouter>
+        </MyCartContext.Provider>
       </MyDispatchContext.Provider>
     </MyUserContext.Provider>
   );

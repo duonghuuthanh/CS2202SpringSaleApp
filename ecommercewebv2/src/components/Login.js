@@ -1,7 +1,7 @@
 import { Button, Col, Form } from "react-bootstrap";
 import MySpinner from "./layouts/MySpinner";
 import { useContext, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
 import Apis, { authApis, endpoints } from "../configs/Apis";
 import cookie from 'react-cookies';
 import { MyDispatchContext } from "../configs/Contexts";
@@ -20,6 +20,7 @@ const Login = () => {
     const [loading, setLoading] = useState(false);
     const nav = useNavigate();
     const dispatch = useContext(MyDispatchContext);
+    const [q] = useSearchParams();
 
     const setState = (value, field) => {
         setUser({...user, [field]: value});
@@ -41,7 +42,9 @@ const Login = () => {
                     "payload": u.data
                 });
 
-                nav("/");
+                let next = q.get('next');
+
+                nav(next ? next:"/");
             } catch (ex) {
                 console.error(ex);
             } finally {

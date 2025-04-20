@@ -8,7 +8,8 @@ export const endpoints = {
     'products': '/products',
     'register': '/users',
     'login': '/login',
-    'profile': '/secure/profile'
+    'profile': '/secure/profile',
+    'cart-payment': '/secure/cart'
 }
 
 export const authApis = () => {
